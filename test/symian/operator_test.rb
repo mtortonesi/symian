@@ -6,20 +6,6 @@ require 'symian/operator'
 
 describe Symian::Operator do
 
-  # it 'should accept only valid parameters' do
-  #   Symian::Operator::ATTRIBUTES.reject{|x| x == :oid or x == :support_group_id }.each do |attribute|
-  #     i = Symian::Operator.new(:oid => 1, :support_group_id => 1, attribute => 1)
-  #     i.send(attribute).must_equal 1
-  #   end
-  # end
-
-
-  # it 'should not accept anything but a hash as a parameter' do
-  #   lambda { Symian::Operator.new(:mickey) }.should raise_error(ArgumentError)
-  #   lambda { Symian::Operator.new([ :mickey, :goofy ]) }.should raise_error(ArgumentError)
-  # end
-
-
   it 'should support :workshift => :all_day_long shortcut' do
     o = Symian::Operator.new(1, 1, :workshift => :all_day_long)
     o.workshift.must_equal Symian::WorkShift::WORKSHIFT_24x7
