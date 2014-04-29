@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+begin
+  require 'symian'
+rescue LoadError
+  require 'rubygems'
+  require 'symian'
+end
+
+if File.exists?(ARGV[0])
+  begin
+    configuration = Symian::Configuration.load_from_file(ARGV[0])
+    kpis = Symian::Simulation.new(configuration,
+                                  Symian::PerformanceAnalyzer.new(configuration)).run
+    puts kpis.inspect
+  rescue Exception => e
+    puts e.inspect
+    puts e.backtrace
+  end
+else
+  puts 'Usage: symian name configuration_file'
+end
