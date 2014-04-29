@@ -64,7 +64,7 @@ module Symian
       end
 
       # TODO: make seeding of this thing configurable...
-      @rng = ERV::RandomVariable.new(:distribution => :uniform, :min_value => 0, :max_value => 1)
+      @rng = ERV::RandomVariable.new(:distribution => :uniform, :min_value => 0.0, :max_value => 1.0)
     end
 
 

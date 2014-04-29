@@ -1,4 +1,3 @@
-# require 'symian/support/extensions'
 require 'symian/support/yaml_io'
 
 
