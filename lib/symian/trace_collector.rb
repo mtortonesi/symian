@@ -68,7 +68,7 @@ module Symian
     end
 
     def save_and_close
-      raise NotImplementedError, 'A trace with memory backend cannot be saved!'
+      # raise NotImplementedError, 'A trace with memory backend cannot be saved!'
     end
 
   end
