@@ -26,8 +26,6 @@ support_groups \
   'SG2' => { :work_time => { :distribution => :exponential, :mean => 1980 },
              :operators => { :number => 1, :workshift => :all_day_long } },
   'SG3' => { :work_time => { :distribution => :exponential, :mean => 360 },
-             :operators => { :number => 1, :workshift => :all_day_long } },
-  'SG4' => { :work_time => { :distribution => :exponential, :mean => 1.32294E+06 },
              :operators => { :number => 1, :workshift => :all_day_long } }
 END
 
@@ -41,6 +39,27 @@ transition_matrix %q{
 }
 END
 
+COST_ANALYSIS_CHARACTERIZATION = <<END
+cost_analysis \
+  :operations => [
+    { :sg_name => 'SG1', :operator_salary => 30_000 },
+    { :sg_name => 'SG2', :operator_salary => 40_000 },
+    { :sg_name => 'SG3', :operator_salary => 25_000 },
+  ],
+  :contracting => lambda { |kpis|
+    kpis[:mttr] > 9000 ? 1500 : 0.0
+  },
+  :drift => lambda { |kpis|
+    target = 500
+    delta = target - kpis[:micd]
+    if delta > 0.0
+      1500.0 * (2.0 / Math::PI) * Math::atan(10.0 * delta / target)
+    else
+      0.0
+    end
+  }
+END
+
 
 # this is the whole reference configuration
 # (useful for spec'ing configuration.rb)
@@ -48,7 +67,8 @@ REFERENCE_CONFIGURATION =
   SIMULATION_CHARACTERIZATION +
   INCIDENT_GENERATION_CHARACTERIZATION +
   SUPPORT_GROUPS_CHARACTERIZATION +
-  TRANSITION_MATRIX_CHARACTERIZATION
+  TRANSITION_MATRIX_CHARACTERIZATION +
+  COST_ANALYSIS_CHARACTERIZATION
 
 evaluator = Object.new
 evaluator.extend Symian::Configurable
@@ -59,6 +79,7 @@ evaluator.instance_eval(REFERENCE_CONFIGURATION)
 INCIDENT_GENERATION = evaluator.incident_generation
 SUPPORT_GROUPS      = evaluator.support_groups
 TRANSITION_MATRIX   = evaluator.transition_matrix
+COST_ANALYSIS       = evaluator.cost_analysis
 
 
 def with_reference_config(opts={})
