@@ -19,8 +19,8 @@ describe Symian::TraceCollector do
         Symian::TraceCollector.new(:memory)
       end
 
-      it 'should not allow to save the trace' do
-        lambda { Symian::TraceCollector.new(:memory).save_and_close }.must_raise NotImplementedError
+      it 'should not mind attempts to save the trace' do
+        Symian::TraceCollector.new(:memory).save_and_close
       end
 
     end
