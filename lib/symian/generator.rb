@@ -30,8 +30,8 @@ module Symian
 
       # generate and return incident
       i = Incident.new(@next_iid, next_arrival,
-                       :category     => "normal", # not supported at the moment
-                       :priority     => 0)        # not supported at the moment
+                       :category => 'normal', # not supported at the moment
+                       :priority => 0)        # not supported at the moment
 
       @simulation.new_event(Event::ET_INCIDENT_ARRIVAL, i, next_arrival, nil)
     end

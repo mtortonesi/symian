@@ -118,7 +118,7 @@ module Symian
           when Event::ET_INCIDENT_RESCHEDULING
 
             sg = @support_groups[e.destination]
-            sg.schedule_incident_for_reassignment(e.data[0], e.time)
+            sg.schedule_incident_for_reassignment(e.data[0], e.data[1], e.time)
 
             # TODO: pinpoint instant for calculation of time spent in suspended state
 

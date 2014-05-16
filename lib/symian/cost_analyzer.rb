@@ -19,8 +19,8 @@ module Symian
         # ugly hack
         sum += sg_conf[:operators][:number] * sg_costs[:operator_salary]
       end
-      # need to consider daily costs
-      operations_cost /= 30.0
+      # need to consider daily costs (salaries are annual)
+      operations_cost /= 365.0
 
       # evaluate contracting costs (SLO violations)
       contracting_func = @configuration.cost_analysis[:contracting]

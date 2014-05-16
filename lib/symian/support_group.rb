@@ -141,7 +141,7 @@ module Symian
           i, inc_info, t = @incident_queue.shift
 
           # update incident tracking information
-          queue_time = time.tv_sec - t.tv_sec
+          queue_time = time.to_i - t.to_i
           i.add_tracking_information(:type => :queue,
                                      :at => t,
                                      :duration => queue_time,
@@ -155,12 +155,14 @@ module Symian
           @simulation.new_event(Event::ET_OPERATOR_ACTIVITY_STARTS,
                                 [ op.oid, i.iid ], time, @sgid)
 
+          # assign updates inc_info
           report = op.assign(i, inc_info, time)
-
-          @simulation.new_event(Event::ET_OPERATOR_ACTIVITY_FINISHES,
-                                [ op.oid, i.iid ], report[1], @sgid)
-
           finish_time = report[1]
+
+          puts "finish_time: #{finish_time}, time: #{time}" if time > finish_time
+          @simulation.new_event(Event::ET_OPERATOR_ACTIVITY_FINISHES,
+                                [ op.oid, i.iid ], finish_time, @sgid)
+
           case report[0]
             when :incident_escalation
               @simulation.new_event(Event::ET_INCIDENT_ESCALATION,
@@ -169,7 +171,7 @@ module Symian
               # TODO: implement configurable rescheduling policy
               @incident_queue << [ i, inc_info, finish_time ]
               @simulation.new_event(Event::ET_INCIDENT_RESCHEDULING,
-                                    [ i, op.oid ], finish_time, @sgid)
+                                    [ i, inc_info, op.oid ], finish_time, @sgid)
           end
         end
       end
