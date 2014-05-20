@@ -13,7 +13,7 @@ describe Symian::CostAnalyzer do
       with_reference_config do |conf|
         ca = Symian::CostAnalyzer.new(conf)
         res = ca.evaluate(EXAMPLE_KPIS)
-        res[:operations].must_equal((25_000 + 30_000 + 40_000) / 30.0)
+        res[:operations].must_equal((25_000 + 30_000 + 40_000) / 365.0)
       end
     end
   end
