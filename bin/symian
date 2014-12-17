@@ -13,10 +13,12 @@ if File.exists?(ARGV[0])
     kpis = Symian::Simulation.new(configuration,
                                   Symian::PerformanceAnalyzer.new(configuration)).run
     puts kpis.inspect
+    costs = Symian::CostAnalyzer.new(configuration).evaluate(kpis)
+    puts costs
   rescue Exception => e
     puts e.inspect
     puts e.backtrace
   end
 else
-  puts 'Usage: symian name configuration_file'
+  puts 'Usage: symian configuration_file'
 end
