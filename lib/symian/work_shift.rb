@@ -35,10 +35,10 @@ module Symian
         # number of seconds elapsed from last midnight UTC
         @start_time = @start_time.utc.seconds_since_midnight.round
         @end_time   = @end_time.utc.seconds_since_midnight.round
-
-        # check if it is an overnight work shift
-        @overnight = (@type == :all_day_long ? false : @end_time < @start_time)
       end
+
+      # check if it is an overnight work shift
+      @overnight = (@type == :all_day_long ? false : @end_time < @start_time)
     end
 
 
@@ -47,26 +47,30 @@ module Symian
 
       t = time.utc.seconds_since_midnight.round
       if @overnight
-        t < @end_time or t >= @start_time
+        t <= @end_time or t >= @start_time
       else
-        @start_time <= t and t < @end_time
+        @start_time <= t and t <= @end_time
       end
     end
 
 
     def secs_to_end_of_shift(time)
+      raise 'secs_to_end_of_shift called for unavailable operator' unless active_at?(time)
       return Infinity if @type == :all_day_long
 
       t = time.utc.seconds_since_midnight.round
       res = if @overnight
-        if t < @end_time
+        if t <= @end_time
           @end_time - t
-        else # if t > @start_time
-          @end_time + 1.day.to_i - t
-        # TODO: else raise error
+        elsif t >= @start_time
+          @end_time + 1.day - t
+        else
+          # TODO: else raise error
+          raise 'Weird error in secs_to_end_of_shift!'
         end
       else
         # TODO: raise error if t < @start_time or t > @end_time
+        raise 'Weirder error in secs_to_end_of_shift!' if t < @start_time or t > @end_time
         @end_time - t
       end
 
@@ -76,18 +80,21 @@ module Symian
 
 
     def secs_to_begin_of_shift(time)
-      raise RuntimeError if active_at?(time)
+      raise 'secs_to_begin_of_shift called for available operator' if active_at?(time)
 
       t = time.utc.seconds_since_midnight.round
       res = if @overnight
         # TODO: raise error if t < @end_time or t > @start_time
+        raise 'Weirder error in secs_to_begin_of_shift!' if t < @end_time or t > @start_time
         @start_time - t
       else
-        if t < @start_time
+        if t <= @start_time
           @start_time - t
-        else # if t > @end_time
+        elsif t >= @end_time
           @start_time + 1.day - t
-        # TODO: else raise error
+        else
+          # TODO: else raise error
+          raise 'Weird error in secs_to_begin_of_shift!'
         end
       end
 

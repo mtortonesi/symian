@@ -60,7 +60,7 @@ module Symian
       @operators_off_work.each do |op|
         t = op.workshift.secs_to_begin_of_shift(time)
         @simulation.new_event(Event::ET_OPERATOR_RETURNING, op.oid,
-                              time + t - 1, @sgid)
+                              time + t, @sgid)
       end
 
       # find out which operators are on duty and schedule their leaving
@@ -68,7 +68,7 @@ module Symian
       @available_operators.each do |op|
         t = op.workshift.secs_to_end_of_shift(time)
         @simulation.new_event(Event::ET_OPERATOR_LEAVING, op.oid,
-                              time + t - 1, @sgid) unless t == WorkShift::Infinity
+                              time + t, @sgid) unless t == WorkShift::Infinity
       end
     end
 

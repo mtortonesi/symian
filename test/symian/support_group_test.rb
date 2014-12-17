@@ -49,7 +49,7 @@ describe Symian::SupportGroup do
 
     @simulation.expect(:new_event,
                        nil,
-                       [ Symian::Event::ET_OPERATOR_LEAVING, String, incident_arrival + 6.hours - 1.second, 'SG' ])
+                       [ Symian::Event::ET_OPERATOR_LEAVING, String, incident_arrival + 6.hours, 'SG'])
 
     sg.initialize_at(start_time)
     i = Symian::Incident.new(0, incident_arrival,

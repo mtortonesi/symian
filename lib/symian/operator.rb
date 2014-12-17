@@ -8,6 +8,8 @@ module Symian
 
   class Operator
 
+    extend Forwardable
+
     REQUIRED_ATTRIBUTES = [
       :oid,
       :support_group_id,
@@ -21,6 +23,9 @@ module Symian
     ]
 
     attr_reader *(REQUIRED_ATTRIBUTES + OTHER_ATTRIBUTES)
+
+    def_delegators :@workshift, :active_at?, :secs_to_begin_of_shift, :secs_to_end_of_shift
+    def_delegator :@workshift, :duration, :workshift_duration
 
 
     def initialize(oid, support_group_id, opts={})
@@ -53,12 +58,14 @@ module Symian
 
       # calculate time to end of shift
       tteos = @workshift.secs_to_end_of_shift(time)
+      raise "tteos: #{tteos}" if tteos < 0.0
 
       # specialization
       specialization = @specialization[incident.category] || 1.0
 
       # calculate time to incident escalation
       ttie = incident_info[:needed_work_time] / specialization.to_f
+      raise "ttie: #{ttie}" if ttie < 0.0
 
       # handle incident
       if tteos < ttie # end of shift first
