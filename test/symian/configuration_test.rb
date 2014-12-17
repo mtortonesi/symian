@@ -51,4 +51,16 @@ describe Symian::Configuration do
 
   end
 
+  context 'cloning mechanism' do
+    it 'should correctly clone w/ other ops' do
+      with_reference_config do |conf|
+        new_ops = (1..conf.support_groups.size).to_a
+        new_conf = conf.reallocate_ops_and_clone(new_ops)
+        new_conf.support_groups.zip(new_ops) do |(k,v),num_ops|
+          v[:operators][:number].must_equal num_ops
+        end
+      end
+    end
+  end
+
 end
