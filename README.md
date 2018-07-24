@@ -1,5 +1,9 @@
 # SYMIAN
 
+[![Gem Version](https://badge.fury.io/rb/symian.svg)](https://badge.fury.io/rb/symian)
+[![Build Status](https://travis-ci.org/mtortonesi/symian.png?branch=master)](https://travis-ci.org/mtortonesi/symian)
+[![Code Climate](https://codeclimate.com/github/mtortonesi/symian.png)](https://codeclimate.com/github/mtortonesi/symian)
+
 Symian is a tool, based on what-if scenario analysis and discrete-event
 simulation, for the modeling of a hierarchical and multi-level incident
 management structures. The simulative approach allows to extract important
